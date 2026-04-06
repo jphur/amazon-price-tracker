@@ -6,7 +6,7 @@ Designed for execution on residential IP environments (local/home server) to avo
 
 ## Requirements
 
-- Python 3.14+
+- Python 3.13+
 - Docker (optional)
 - `playwright`, `python-dotenv`, `httpx`
 
