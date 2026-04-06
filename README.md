@@ -1,4 +1,4 @@
-# Shadow Check
+# Amazon price tracker
 
 Price checker using Playwright that loads an Amazon product page, extracts the price, and sends a notification via Telegram.
 

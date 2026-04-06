@@ -13,13 +13,11 @@ with sync_playwright() as p:
     browser = p.chromium.launch()
     context = browser.new_context(
         user_agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.0.0 Safari/537.36",
-        locale="es-ES",
-        timezone_id="Europe/Madrid"
     )
     page = context.new_page()
+
     # 2. Navigate to Amazon homepage to establish session and cookies
     page.goto("https://www.amazon.es", wait_until="networkidle")
-    
 
     try:
         url = os.environ["URL"]
