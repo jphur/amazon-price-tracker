@@ -1,13 +1,15 @@
-FROM python:3.14-slim
+FROM python:3.13-slim
 COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/
+
+ENV PYTHONDONTWRITEBYTECODE=1
+ENV PYTHONUNBUFFERED=1
 
 WORKDIR /app
 
+COPY pyproject.toml uv.lock /app/
+RUN uv sync --frozen --no-cache
+
 COPY . /app
-
-RUN uv sync
-
-RUN uv run playwright install --with-deps && \
-    uv run playwright install chromium
+RUN uv run playwright install --with-deps chromium
 
 CMD  ["uv","run", "main.py"]
