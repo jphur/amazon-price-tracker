@@ -17,12 +17,12 @@ with sync_playwright() as p:
     page = context.new_page()
 
     # 2. Navigate to Amazon homepage to establish session and cookies
-    page.goto("https://www.amazon.es", wait_until="networkidle")
+    page.goto("https://www.amazon.es", wait_until="domcontentloaded")
 
     try:
         url = os.environ["URL"]
         print("Navigating to product page...")
-        page.goto(url, wait_until="networkidle", timeout=60000)
+        page.goto(url, wait_until="domcontentloaded", timeout=60000)
         page.wait_for_selector(".a-price-whole", timeout=10000)
         
         # 3. Extraction
