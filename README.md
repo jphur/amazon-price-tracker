@@ -10,7 +10,7 @@ Price checker using Playwright that loads an Amazon product page, extracts the p
 
 ## Environment variables
 
-Create a `.env` file in the project root with the required values:
+Create a `.env` file in the project root with the required values. `TARGET_PRICE` is the threshold used to decide whether to send a Telegram notification.
 
 ```ini
 URL=https://www.amazon.com/dp/XXXXXXXXXX
@@ -53,12 +53,14 @@ TARGET_PRICE=70.00
 ## Current flow
 
 1. `main.py` reads `URL`, `TELEGRAM_BOT_TOKEN`, `TELEGRAM_CHAT_ID`, and `TARGET_PRICE` from `.env`.
-2. It launches Chromium with a human-like user agent.
-3. It navigates to the product page and waits for the price section to appear.
-4. It extracts the Amazon price and formats it.
-5. It prints the product title and price to the console.
-6. If the price is below or equal to `TARGET_PRICE`, it sends a Telegram notification.
-7. If the price is above the target, it prints that no notification was sent.
+2. It launches Chromium with a human-like user agent, `es-ES` locale and `Europe/Madrid` timezone.
+3. It opens the Amazon homepage first to establish session and cookies.
+4. It navigates to the product page and waits for the price section to appear.
+5. It extracts the Amazon price and formats it.
+6. It prints the product title and price to the console.
+7. If the price is below or equal to `TARGET_PRICE`, it sends a Telegram notification.
+8. If the price is above the target, it prints that no notification was sent.
+9. On failure it takes a screenshot and sends it to Telegram if the bot config is available.
 
 ## Docker usage
 

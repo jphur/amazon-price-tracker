@@ -18,7 +18,7 @@ with sync_playwright() as p:
     )
     page = context.new_page()
     # 2. Navigate to Amazon homepage to establish session and cookies
-    page.goto("https://www.amazon.es", wait_until="networkidle")
+    page.goto("https://www.amazon.es", wait_until="domcontentloaded")
     
 
     try:
