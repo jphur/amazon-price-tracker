@@ -50,5 +50,14 @@ with sync_playwright() as p:
 
     except Exception as e:
         print(f"failure: {e}")
+        # Take a screenshot for debugging
+        page.screenshot(path="error.png")
+        
+        with open("error.png", "rb") as f:
+            httpx.post(
+                f"https://api.telegram.org/bot{os.environ['TELEGRAM_BOT_TOKEN']}/sendPhoto",
+                data={"chat_id": os.environ["TELEGRAM_CHAT_ID"]},
+                files={"photo": f}
+            )
     finally:
         browser.close()
