@@ -2,6 +2,8 @@
 
 Price checker using Playwright that loads an Amazon product page, extracts the price, and sends a notification via Telegram.
 
+Designed for execution on residential IP environments (local/home server) to avoid datacenter IP blocking commonly used by high-security e-commerce sites.
+
 ## Requirements
 
 - Python 3.14+
