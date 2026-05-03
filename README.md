@@ -27,7 +27,7 @@ TARGET_PRICE=70.00
 
     ```bash
     git clone <repo-url>
-    cd shadow-check
+    cd amazon-price-tracker
     ```
 
 2. Create and activate a virtual environment:
