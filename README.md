@@ -66,5 +66,4 @@ TARGET_PRICE=70.00
 
 ## Notes
 
-- This version does not depend on Playwright or any heavy browser automation, making it much faster and lightweight.
 - If Amazon changes its page structure, the regular expressions in `main.py` might need adjustment.
