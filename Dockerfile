@@ -10,6 +10,5 @@ COPY pyproject.toml uv.lock /app/
 RUN uv sync --frozen --no-cache
 
 COPY . /app
-RUN uv run playwright install --with-deps chromium
 
 CMD  ["uv","run", "main.py"]

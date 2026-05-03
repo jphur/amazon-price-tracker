@@ -1,92 +1,70 @@
 # Amazon price tracker
 
-Price checker using Playwright that loads an Amazon product page, extracts the price, and sends a notification via Telegram.
+Simple price checker using `httpx` and `regex` that loads an Amazon product page, extracts the price, and sends a notification via Telegram.
 
 Designed for execution on residential IP environments (local/home server) to avoid datacenter IP blocking commonly used by high-security e-commerce sites.
 
 ## Requirements
 
 - Python 3.13+
-- Docker (optional)
-- `playwright`, `python-dotenv`, `httpx`
+- `uv` (recommended for dependency management)
+- `httpx`, `python-dotenv`
 
 ## Environment variables
 
-Create a `.env` file in the project root with the required values. `TARGET_PRICE` is the threshold used to decide whether to send a Telegram notification.
+Create a `.env` file in the project root with the required values:
 
 ```ini
-URL=https://www.amazon.com/dp/XXXXXXXXXX
-TELEGRAM_BOT_TOKEN=123456:ABC-DEF1234ghIkl-zyx57W2v1u123ew11
-TELEGRAM_CHAT_ID=-1001234567890
+URL=https://www.amazon.es/dp/XXXXXXXXXX
+TELEGRAM_BOT_TOKEN=123456:ABC-DEF...
+TELEGRAM_CHAT_ID=-100...
 TARGET_PRICE=70.00
 ```
 
 ## Local usage
 
-1. Clone the repository:
+1. Clone the repository and navigate to it:
 
     ```bash
     git clone <repo-url>
     cd amazon-price-tracker
     ```
 
-2. Create and activate a virtual environment:
+2. Install dependencies (using `uv`):
 
     ```bash
-    python -m venv .venv
-    source .venv/bin/activate
+    uv sync
     ```
 
-3. Install dependencies:
-
-    ```bash
-    python -m pip install playwright python-dotenv httpx
-    python -m playwright install chromium
-    ```
-
-4. Run the script:
+3. Run the script:
 
     ```bash
     uv run main.py
-    # or if you don't have uv:
-    python main.py
     ```
 
-## Current flow
+## How it works
 
-1. `main.py` reads `URL`, `TELEGRAM_BOT_TOKEN`, `TELEGRAM_CHAT_ID`, and `TARGET_PRICE` from `.env`.
-2. It launches Chromium with a human-like user agent, `es-ES` locale and `Europe/Madrid` timezone.
-3. It opens the Amazon homepage first to establish session and cookies.
-4. It navigates to the product page and waits for the price section to appear.
-5. It extracts the Amazon price and formats it.
-6. It prints the product title and price to the console.
-7. If the price is below or equal to `TARGET_PRICE`, it sends a Telegram notification.
-8. If the price is above the target, it prints that no notification was sent.
-9. On failure it takes a screenshot and sends it to Telegram if the bot config is available.
+1. `main.py` reads configuration from `.env`.
+2. It makes an HTTP request to the Amazon product page using `httpx` with a custom User-Agent.
+3. It uses regular expressions (`re`) to extract the product title and price from the HTML.
+4. If the price is below or equal to `TARGET_PRICE`, it sends a message via the Telegram Bot API.
+5. In case of failure, it saves the HTML to `error_page.html` for debugging.
 
 ## Docker usage
 
-1. Build the Docker image:
+1. Build the image:
 
     ```bash
-    docker build -t shadow-check .
+    docker build -t amazon-tracker .
     ```
 
-2. Run the container with the `.env` file:
+2. Run the container:
 
     ```bash
-    docker run --rm --env-file .env --name shadow-check shadow-check
-    ```
-
-3. To debug without automatically removing the container:
-
-    ```bash
-    docker run --name shadow-check --env-file .env shadow-check
-    docker logs -f shadow-check
-    docker rm shadow-check
+    docker run --rm --env-file .env amazon-tracker
     ```
 
 ## Notes
 
-- The project uses `pyproject.toml` to declare dependencies.
-- If the Amazon price selector changes, update the selectors in `main.py`.
+- This version does not depend on Playwright or any heavy browser automation, making it much faster and lightweight.
+- If Amazon changes its page structure, the regular expressions in `main.py` might need adjustment.
